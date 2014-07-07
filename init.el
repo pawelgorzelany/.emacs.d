@@ -18,7 +18,10 @@
  '(make-backup-files nil)
  '(show-paren-mode t)
  '(tool-bar-mode nil)
- '(tooltip-mode nil))
+ '(tooltip-mode nil)
+ '(indent-tabs-mode nil)
+ '(initial-scratch-message nil)
+ '(make-backup-files nil))
 
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
@@ -40,6 +43,10 @@
 (when (memq window-system '(mac ns))
   (exec-path-from-shell-initialize))
 
+;; modify window title
+(when window-system
+  (setq frame-title-format '(buffer-file-name "%f" ("%b"))))
+
 ;; initialize slime
 (require 'slime-autoloads)
 (setq inferior-lisp-program "/usr/local/bin/sbcl")
@@ -48,9 +55,12 @@
 ;; initialize flycheck
 (add-hook 'after-init-hook #'global-flycheck-mode)
 
-;; shrten 'yes or no' to 'y or n'
+;; trim trailing whitespace and delete blank lines on save
+(add-hook 'before-save-hook 'delete-trailing-whitespace
+      'delete-blank-lines)
+
+;; shorten 'yes or no' to 'y or n'
 (defalias 'yes-or-no-p 'y-or-n-p)
 
 (provide 'init)
 ;;; init.el ends here
-
