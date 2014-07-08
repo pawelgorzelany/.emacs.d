@@ -15,6 +15,12 @@
  '(bold-italic ((t (:italic t :bold t))))
  '(calendar-today-face ((t (:underline t))))
  '(diary-face ((t (:foreground "red"))))
+
+ ;; Mode line faces
+ '(mode-line ((t (:background "#444444" :foreground "#857b6f"))))
+ '(mode-line-inactive ((t (:background "#444444" :foreground "#857b6f"))))
+
+ ;; Font lock faces
  '(font-lock-builtin-face ((t (:bold t :foreground "#66d9ef"))))
  '(font-lock-comment-face ((t (:foreground "#8e8e8e"))))
  '(font-lock-constant-face ((t (:foreground "#f8f8f2"))))
@@ -40,10 +46,6 @@
  '(message-header-xheader-face ((t (:foreground "blue"))))
  '(message-mml-face ((t (:foreground "ForestGreen"))))
  '(message-separator-face ((t (:foreground "blue3"))))
- '(modeline ((t (:background "white" :foreground "DeepSkyBlue3"))))
- '(modeline-buffer-id ((t (:background "white" :foreground "DeepSkyBlue3"))))
- '(modeline-mousable ((t (:background "white" :foreground "DeepSkyBlue3"))))
- '(modeline-mousable-minor-mode ((t (:background "white" :foreground "DeepSkyBlue3"))))
  '(region ((t (:background "grey"))))
  '(secondary-selection ((t (:background "darkslateblue"))))
  '(show-paren-match-face ((t (:background "turquoise"))))

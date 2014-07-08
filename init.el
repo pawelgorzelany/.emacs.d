@@ -10,7 +10,7 @@
  ;; If there is more than one, they won't work right.
  '(blink-cursor-mode nil)
  '(column-number-mode t)
- '(custom-safe-themes (quote ("bb452baeed77ebb3dbd7d87df64fdc27cd9cbae868bcc25eee197df17298cfb2" default)))
+ '(custom-safe-themes (quote ("e0805a9707a21efb80eb26a9487b1f16ef0bef06d851c0b0c87bf3427a2dbd93" "bb452baeed77ebb3dbd7d87df64fdc27cd9cbae868bcc25eee197df17298cfb2" default)))
  '(global-linum-mode t)
  '(indent-tabs-mode nil)
  '(inhibit-startup-screen t)
