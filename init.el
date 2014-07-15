@@ -17,6 +17,7 @@
  '(initial-scratch-message nil)
  '(linum-format "%4d ")
  '(make-backup-files nil)
+ '(auto-save-default nil)
  '(menu-bar-mode nil)
  '(scroll-bar-mode nil)
  '(show-paren-mode t)
