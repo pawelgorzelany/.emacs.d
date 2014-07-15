@@ -48,6 +48,10 @@
 (when window-system
   (setq frame-title-format '(buffer-file-name "%f" ("%b"))))
 
+;; initialize auto-complete
+(require 'auto-complete-config)
+(ac-config-default)
+
 ;; initialize slime
 (require 'slime-autoloads)
 (setq inferior-lisp-program "/usr/local/bin/sbcl")
