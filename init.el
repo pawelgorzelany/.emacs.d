@@ -19,6 +19,7 @@
  '(make-backup-files nil)
  '(show-paren-mode t)
  '(tool-bar-mode nil)
+ '(menu-bar-mode nil)
  '(tooltip-mode nil))
 
 (custom-set-faces
@@ -59,6 +60,23 @@
 
 ;; shorten 'yes or no' to 'y or n'
 (defalias 'yes-or-no-p 'y-or-n-p)
+
+;; add site-lisp folder to load-path
+(add-to-list 'load-path "~/.emacs.d/site-lisp/")
+
+;; initialize pymacs
+(autoload 'pymacs-apply "pymacs")
+(autoload 'pymacs-call "pymacs")
+(autoload 'pymacs-eval "pymacs" nil t)
+(autoload 'pymacs-exec "pymacs" nil t)
+(autoload 'pymacs-load "pymacs" nil t)
+(autoload 'pymacs-autoload "pymacs")
+;;(eval-after-load "pymacs"
+;;  '(add-to-list 'pymacs-load-path YOUR-PYMACS-DIRECTORY"))
+
+;; initialize ropemacs
+;;(require 'pymacs)
+(pymacs-load "ropemacs" "rope-")
 
 (provide 'init)
 ;;; init.el ends here
