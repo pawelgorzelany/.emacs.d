@@ -71,6 +71,12 @@
 ;; add site-lisp folder to load-path
 (add-to-list 'load-path "~/.emacs.d/site-lisp/")
 
+;; initialize markdown-mode
+(autoload 'markdown-mode "markdown-mode"
+  "Major mode for editing Markdown files" t)
+(add-to-list 'auto-mode-alist '("\\.markdown\\'" . markdown-mode))
+(add-to-list 'auto-mode-alist '("\\.md\\'" . markdown-mode))
+
 ;; initialize pymacs
 (autoload 'pymacs-apply "pymacs")
 (autoload 'pymacs-call "pymacs")
