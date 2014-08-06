@@ -17,10 +17,12 @@
  '(initial-scratch-message nil)
  '(linum-format "%4d ")
  '(make-backup-files nil)
+ '(auto-save-default nil)
  '(menu-bar-mode nil)
  '(scroll-bar-mode nil)
  '(show-paren-mode t)
  '(tool-bar-mode nil)
+ '(menu-bar-mode nil)
  '(tooltip-mode nil))
 
 (custom-set-faces
@@ -47,6 +49,10 @@
 (when window-system
   (setq frame-title-format '(buffer-file-name "%f" ("%b"))))
 
+;; initialize auto-complete
+(require 'auto-complete-config)
+(ac-config-default)
+
 ;; initialize slime
 (require 'slime-autoloads)
 (setq inferior-lisp-program "/usr/local/bin/sbcl")
@@ -66,6 +72,29 @@
 
 ;; shorten 'yes or no' to 'y or n'
 (defalias 'yes-or-no-p 'y-or-n-p)
+
+;; add site-lisp folder to load-path
+(add-to-list 'load-path "~/.emacs.d/site-lisp/")
+
+;; initialize markdown-mode
+(autoload 'markdown-mode "markdown-mode"
+  "Major mode for editing Markdown files" t)
+(add-to-list 'auto-mode-alist '("\\.markdown\\'" . markdown-mode))
+(add-to-list 'auto-mode-alist '("\\.md\\'" . markdown-mode))
+
+;; initialize pymacs
+(autoload 'pymacs-apply "pymacs")
+(autoload 'pymacs-call "pymacs")
+(autoload 'pymacs-eval "pymacs" nil t)
+(autoload 'pymacs-exec "pymacs" nil t)
+(autoload 'pymacs-load "pymacs" nil t)
+(autoload 'pymacs-autoload "pymacs")
+;;(eval-after-load "pymacs"
+;;  '(add-to-list 'pymacs-load-path YOUR-PYMACS-DIRECTORY"))
+
+;; initialize ropemacs
+;;(require 'pymacs)
+(pymacs-load "ropemacs" "rope-")
 
 (provide 'init)
 ;;; init.el ends here
