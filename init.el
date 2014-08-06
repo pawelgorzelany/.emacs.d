@@ -59,6 +59,11 @@
 (add-hook 'before-save-hook 'delete-trailing-whitespace
       'delete-blank-lines)
 
+;; customize haskell-mode indentation
+;(add-hook 'haskell-mode-hook 'turn-on-haskell-simple-indent)
+(add-hook 'haskell-mode-hook 'turn-on-haskell-indent)
+;(add-hook 'haskell-mode-hook 'turn-on-haskell-indentation)
+
 ;; shorten 'yes or no' to 'y or n'
 (defalias 'yes-or-no-p 'y-or-n-p)
 
