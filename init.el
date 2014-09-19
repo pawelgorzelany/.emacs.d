@@ -38,13 +38,36 @@
 (load-theme 'neon)
 
 ;; custom key bindings
-(global-set-key (kbd "C-c m") 'magit-status)
+;(global-set-key (kbd "C-c m") 'magit-status)
 
 ;; initialize MELPA
 (require 'package)
 (add-to-list 'package-archives
 	     '("melpa" . "http://melpa.milkbox.net/packages/") t)
 (package-initialize)
+
+;; setup `use-package` package, install if not previously installed
+(if (not (package-installed-p 'use-package))
+    (progn
+      (package-refresh-contents)
+      (package-install 'use-package)))
+
+(require 'use-package)
+
+;; now setup all 3rd party packages
+(use-package flycheck
+             :ensure t)
+(use-package auto-complete
+             :ensure t)
+(use-package slime
+             :ensure t)
+(use-package haskell-mode
+             :ensure t)
+(use-package markdown-mode
+             :ensure t)
+(use-package magit
+             :ensure t
+             :bind ("C-c m" . magit-status))
 
 ;; initialize exec-path-from-shell
 (when (memq window-system '(mac ns))
