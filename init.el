@@ -11,11 +11,11 @@
  '(blink-cursor-mode nil)
  '(column-number-mode t)
  '(custom-safe-themes (quote ("e0805a9707a21efb80eb26a9487b1f16ef0bef06d851c0b0c87bf3427a2dbd93" "bb452baeed77ebb3dbd7d87df64fdc27cd9cbae868bcc25eee197df17298cfb2" default)))
- '(global-linum-mode t)
+ ;'(global-linum-mode t)
  '(indent-tabs-mode nil)
  '(inhibit-startup-screen t)
  '(initial-scratch-message nil)
- '(linum-format "%4d ")
+ ;'(linum-format "%4d ")
  '(make-backup-files nil)
  '(auto-save-default nil)
  '(menu-bar-mode nil)
@@ -36,6 +36,9 @@
 
 ;; use a custom color theme
 (load-theme 'neon)
+
+;; custom key bindings
+(global-set-key (kbd "C-c m") 'magit-status)
 
 ;; initialize MELPA
 (require 'package)
