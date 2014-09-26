@@ -91,7 +91,7 @@
 
 ;; trim trailing whitespace and delete blank lines on save
 (add-hook 'before-save-hook 'delete-trailing-whitespace
-      'delete-blank-lines)
+          'delete-blank-lines)
 
 ;; customize haskell-mode indentation
 ;(add-hook 'haskell-mode-hook 'turn-on-haskell-simple-indent)
@@ -110,19 +110,21 @@
 (add-to-list 'auto-mode-alist '("\\.markdown\\'" . markdown-mode))
 (add-to-list 'auto-mode-alist '("\\.md\\'" . markdown-mode))
 
-;; initialize pymacs
-(autoload 'pymacs-apply "pymacs")
-(autoload 'pymacs-call "pymacs")
-(autoload 'pymacs-eval "pymacs" nil t)
-(autoload 'pymacs-exec "pymacs" nil t)
-(autoload 'pymacs-load "pymacs" nil t)
-(autoload 'pymacs-autoload "pymacs")
-;;(eval-after-load "pymacs"
-;;  '(add-to-list 'pymacs-load-path YOUR-PYMACS-DIRECTORY"))
+;; initialize pymacs, if it's installed
+(if (package-installed-p 'pymacs)
+    (progn
+     (autoload 'pymacs-apply "pymacs")
+     (autoload 'pymacs-call "pymacs")
+     (autoload 'pymacs-eval "pymacs" nil t)
+     (autoload 'pymacs-exec "pymacs" nil t)
+     (autoload 'pymacs-load "pymacs" nil t)
+     (autoload 'pymacs-autoload "pymacs")
+     ;;(eval-after-load "pymacs"
+     ;;  '(add-to-list 'pymacs-load-path YOUR-PYMACS-DIRECTORY"))
 
-;; initialize ropemacs
-;;(require 'pymacs)
-(pymacs-load "ropemacs" "rope-")
+     ;; initialize ropemacs
+     ;;(require 'pymacs)
+     (pymacs-load "ropemacs" "rope-")))
 
 (provide 'init)
 ;;; init.el ends here
