@@ -56,18 +56,23 @@
 
 ;; now setup all 3rd party packages
 (use-package flycheck
-             :ensure t)
+  :ensure t)
 (use-package auto-complete
-             :ensure t)
+  :ensure t)
 (use-package slime
-             :ensure t)
+  :ensure t)
 (use-package haskell-mode
-             :ensure t)
+  :ensure t)
 (use-package markdown-mode
-             :ensure t)
+  :ensure t)
 (use-package magit
-             :ensure t
-             :bind ("C-c m" . magit-status))
+  :ensure t
+  :bind ("C-c m" . magit-status))
+(use-package nyan-mode
+  :ensure t
+  :init
+  (progn
+    (nyan-mode t)))
 
 ;; initialize exec-path-from-shell
 (when (memq window-system '(mac ns))
