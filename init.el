@@ -23,7 +23,10 @@
  '(show-paren-mode t)
  '(tool-bar-mode nil)
  '(menu-bar-mode nil)
- '(tooltip-mode nil))
+ '(tooltip-mode nil)
+ '(ido-mode t)
+ '(ido-enable-flex-matching t)
+ '(ido-everywhere t))
 
 (put 'dired-find-alternate-file 'disabled nil)
 
@@ -56,18 +59,30 @@
 
 ;; now setup all 3rd party packages
 (use-package flycheck
-             :ensure t)
+  :ensure t)
 (use-package auto-complete
-             :ensure t)
+  :ensure t)
 (use-package slime
-             :ensure t)
+  :ensure t)
 (use-package haskell-mode
-             :ensure t)
+  :ensure t)
 (use-package markdown-mode
-             :ensure t)
+  :ensure t)
+(use-package coffee-mode
+  :ensure t
+  :init (progn
+          (custom-set-variables
+           '(coffee-tab-width 2))))
+(use-package literate-coffee-mode
+  :ensure t)
 (use-package magit
-             :ensure t
-             :bind ("C-c m" . magit-status))
+  :ensure t
+  :bind ("C-c m" . magit-status))
+(use-package jedi
+  :ensure t
+  :init (progn
+          (add-hook 'python-mode-hook 'jedi:setup)
+          (setq jedi:complete-on-dot t)))
 
 ;; initialize exec-path-from-shell
 (when (memq window-system '(mac ns))
@@ -111,18 +126,18 @@
 (add-to-list 'auto-mode-alist '("\\.md\\'" . markdown-mode))
 
 ;; initialize pymacs
-(autoload 'pymacs-apply "pymacs")
-(autoload 'pymacs-call "pymacs")
-(autoload 'pymacs-eval "pymacs" nil t)
-(autoload 'pymacs-exec "pymacs" nil t)
-(autoload 'pymacs-load "pymacs" nil t)
-(autoload 'pymacs-autoload "pymacs")
+;(autoload 'pymacs-apply "pymacs")
+;(autoload 'pymacs-call "pymacs")
+;(autoload 'pymacs-eval "pymacs" nil t)
+;(autoload 'pymacs-exec "pymacs" nil t)
+;(autoload 'pymacs-load "pymacs" nil t)
+;(autoload 'pymacs-autoload "pymacs")
 ;;(eval-after-load "pymacs"
 ;;  '(add-to-list 'pymacs-load-path YOUR-PYMACS-DIRECTORY"))
 
 ;; initialize ropemacs
 ;;(require 'pymacs)
-(pymacs-load "ropemacs" "rope-")
+;(pymacs-load "ropemacs" "rope-")
 
 (provide 'init)
 ;;; init.el ends here
