@@ -1,5 +1,7 @@
-;;; init.el --- Initialization file for emacs.
+;;; init.el --- Initialization file for Emacs.
 ;;; Commentary:
+;;; This is my Emacs setup.
+;;; author: @gonzomember
 
 ;;; Code:
 
@@ -70,16 +72,18 @@
 (use-package helm
   :ensure t
   :init (progn
-          (helm-mode t))
-  :bind ("C-c h" . helm-mini))
+          (setq default-directory "~/Projects/")
+          (helm-mode t)
+          (bind-key "C-c h" 'helm-mini)))
 
 (use-package slime
   :ensure t
+  :commands slime
   :init (progn
-          ;this works well for OS X and brew but on linux usually requires a symlink
-          (setq inferior-lisp-program "/usr/local/bin/sbcl")
-          ;(setq slime-contribs '(slime-scratch slime-editing-commands))
-          (setq slime-contribs '(slime-fancy))))
+            ;this works well for OS X and brew but on linux usually requires a symlink
+            (setq inferior-lisp-program (executable-find "sbcl"))
+            (setq slime-contribs '(slime-scratch slime-editing-commands))
+            (setq slime-contribs '(slime-fancy))))
 
 (use-package haskell-mode
   :ensure t
@@ -88,9 +92,7 @@
 
 (use-package markdown-mode
   :ensure t
-  :init (progn
-          (add-to-list 'auto-mode-alist '("\\.markdown\\'" . markdown-mode))
-          (add-to-list 'auto-mode-alist '("\\.md\\'" . markdown-mode))))
+  :mode (("\\.markdown\\'" . markdown-mode) ("\\.md\\'" . markdown-mode)))
 
 (use-package coffee-mode
   :ensure t
@@ -102,8 +104,7 @@
 
 (use-package web-mode
   :ensure t
-  :init (progn
-          (add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))))
+  :mode ("\\.html?\\'" . web-mode))
 
 (use-package magit
   :ensure t
@@ -123,14 +124,21 @@
 ;; do some custom OS X stuff like:
 ;;; - initialize exec-path-from-shell
 ;;; - enable menu
-(when (memq window-system '(mac ns))
-  (progn
-    (exec-path-from-shell-initialize)
-    (setq menu-bar-mode t)))
+(if (memq window-system '(mac ns))
+    (progn
+      (exec-path-from-shell-initialize)
+      (setq menu-bar-mode t)))
 
 ;; modify window titlebar
-(when window-system
-  (setq frame-title-format '(buffer-file-name "%f" ("%b"))))
+(defun set-window-title ()
+  "Set window title to either filename or buffer name."
+  (if window-system
+      (progn
+        (setq frame-title-format '(:eval (if (buffer-file-name)
+                                             (abbreviate-file-name (buffer-file-name))
+                                           "%b"))))))
+
+(add-hook 'window-setup-hook 'set-window-title)
 
 ;; trim trailing whitespace and delete blank lines on save
 (add-hook 'before-save-hook 'delete-trailing-whitespace
