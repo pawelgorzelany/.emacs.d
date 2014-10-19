@@ -127,7 +127,7 @@
 (if (memq window-system '(mac ns))
     (progn
       (exec-path-from-shell-initialize)
-      (setq menu-bar-mode t)))
+      (menu-bar-mode t)))
 
 ;; modify window titlebar
 (defun set-window-title ()
