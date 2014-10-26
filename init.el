@@ -69,6 +69,11 @@
   :init (progn
           (ac-config-default)))
 
+(use-package yasnippet
+  :ensure t
+  :init (progn
+          (yas-global-mode t)))
+
 (use-package helm
   :ensure t
   :init (progn
