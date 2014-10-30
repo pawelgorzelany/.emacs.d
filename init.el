@@ -42,7 +42,7 @@
 ;; initialize MELPA
 (require 'package)
 (add-to-list 'package-archives
-	     '("melpa" . "http://melpa.milkbox.net/packages/") t)
+	     '("melpa" . "http://melpa.org/packages/") t)
 (package-initialize)
 
 ;; setup `use-package` package, install if not previously installed
@@ -131,7 +131,10 @@
 ;;; - enable menu
 (if (memq window-system '(mac ns))
     (progn
-      (exec-path-from-shell-initialize)
+      (use-package exec-path-from-shell
+        :ensure t
+        :init (progn
+                (exec-path-from-shell-initialize)))
       (menu-bar-mode t)))
 
 ;; modify window titlebar
