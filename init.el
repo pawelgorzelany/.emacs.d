@@ -81,6 +81,15 @@
           (helm-mode t)
           (bind-key "C-c h" 'helm-mini)))
 
+(use-package projectile
+  :ensure t
+  :init (progn
+          (use-package helm-projectile
+            :ensure t)
+          (projectile-global-mode)
+          (setq projectile-completion-system 'helm)
+          (helm-projectile-on)))
+
 (use-package slime
   :ensure t
   :commands slime
