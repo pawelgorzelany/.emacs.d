@@ -54,10 +54,31 @@
 (require 'use-package)
 
 ;; now setup all 3rd party packages and install them as necessary
-(use-package monokai-theme
+
+;; themes - uncomment which ever suits the mood
+
+;; (use-package monokai-theme
+;;   :ensure t
+;;   :init (progn
+;;           (load-theme 'monokai t)))
+
+(use-package moe-theme
   :ensure t
   :init (progn
-          (load-theme 'monokai t)))
+          (load-theme 'moe-dark t)))
+
+;; themes selection ends here.
+
+(use-package rainbow-delimiters
+  :ensure t
+  :init (progn
+          ;; set hooks for specific modes
+          ;; for all programming modes
+          (add-hook 'prog-mode-hook 'rainbow-delimiters-mode)))
+          ;; or for python only
+          ;; (add-hook 'python-mode-hook 'rainbow-delimiters-mode)
+          ;; or if shit gets fancy set rainbowish flavor all over the place
+          ;; (global-rainbow-delimiters-mode)))
 
 (use-package flycheck
   :ensure t
@@ -129,6 +150,13 @@
   :init (progn
           (add-hook 'python-mode-hook 'jedi:setup)
           (setq jedi:complete-on-dot t)))
+
+(use-package twittering-mode
+  :ensure t
+  :init (progn
+          (setq twittering-use-master-password t)
+          (setq twittering-icon-mode t)
+          (setq twittering-use-icon-storage t)))
 
 (use-package nyan-mode
   :ensure t
