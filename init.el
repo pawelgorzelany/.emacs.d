@@ -139,7 +139,9 @@
 
 (use-package web-mode
   :ensure t
-  :mode ("\\.html?\\'" . web-mode))
+  :mode ("\\.html?\\'" . web-mode)
+  :init (progn
+          (setq web-mode-markup-indent-offset 2)))
 
 (use-package magit
   :ensure t
