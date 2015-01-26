@@ -24,6 +24,7 @@
  '(tool-bar-mode nil)
  '(menu-bar-mode nil)
  '(tooltip-mode nil)
+ '(visible-bell t)
  ;'(ido-mode t)
  ;'(ido-enable-flex-matching t)
  ;'(ido-everywhere t)
@@ -93,7 +94,11 @@
 (use-package yasnippet
   :ensure t
   :init (progn
-          (yas-global-mode t)))
+          ;; make yasnippet globally available
+          (yas-global-mode t)
+          ;; but disable it in shell mode
+          (add-hook 'shell-mode-hook #'(lambda ()
+                                         (yas-minor-mode nil)))))
 
 (use-package helm
   :ensure t
