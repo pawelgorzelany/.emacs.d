@@ -158,6 +158,12 @@
           (add-hook 'python-mode-hook 'jedi:setup)
           (setq jedi:complete-on-dot t)))
 
+(use-package virtualenvwrapper
+  :ensure t
+  :init (progn
+          (venv-initialize-eshell)
+          (setq venv-location "~/.virtualenvs/")))
+
 (use-package twittering-mode
   :ensure t
   :init (progn
