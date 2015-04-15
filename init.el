@@ -10,26 +10,21 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(auto-save-default nil)
  '(blink-cursor-mode nil)
  '(column-number-mode t)
-  ;'(global-linum-mode t)
  '(indent-tabs-mode nil)
  '(inhibit-startup-screen t)
  '(initial-scratch-message nil)
- ;'(linum-format "%4d ")
  '(make-backup-files nil)
- '(auto-save-default nil)
+ '(menu-bar-mode nil)
+ '(org t)
+ '(org-log-done t)
  '(scroll-bar-mode nil)
  '(show-paren-mode t)
  '(tool-bar-mode nil)
- '(menu-bar-mode nil)
  '(tooltip-mode nil)
- '(visible-bell t)
- ;'(ido-mode t)
- ;'(ido-enable-flex-matching t)
- ;'(ido-everywhere t)
- '(org t)
- '(org-log-done t))
+ '(visible-bell t))
 
 (put 'dired-find-alternate-file 'disabled nil)
 
@@ -60,13 +55,13 @@
 
 ;; (use-package monokai-theme
 ;;   :ensure t
-;;   :init (progn
-;;           (load-theme 'monokai t)))
+;;   :config (progn
+;;             (load-theme 'monokai t)))
 
 (use-package moe-theme
   :ensure t
-  :init (progn
-          (load-theme 'moe-dark t)))
+  :config (progn
+            (load-theme 'moe-dark t)))
 
 ;; themes selection ends here.
 
@@ -161,7 +156,6 @@
 (use-package virtualenvwrapper
   :ensure t
   :init (progn
-          (venv-initialize-eshell)
           (setq venv-location "~/.virtualenvs/")))
 
 (use-package twittering-mode
