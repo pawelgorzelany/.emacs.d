@@ -39,7 +39,11 @@
 (require 'package)
 (add-to-list 'package-archives
 	     '("melpa" . "http://melpa.org/packages/") t)
+(add-to-list 'package-archives
+             '("melpa-stable" . "http://stable.melpa.org/packages/") t)
+
 (package-initialize)
+(add-to-list 'package-pinned-packages '(cider . "melpa-stable") t)
 
 ;; setup `use-package` package, install if not previously installed
 (if (not (package-installed-p 'use-package))
