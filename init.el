@@ -41,10 +41,15 @@
  )
 
 ;; initialize MELPA
+;; by default install all packages from melpa but add also melpa-stable for pinned packages
+;; like for example cider
 (require 'package)
-(add-to-list 'package-archives
-	     '("melpa" . "http://melpa.org/packages/") t)
+(add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/") t)
+(add-to-list 'package-archives '("melpa-stable" . "http://stable.melpa.org/packages/") t)
 (package-initialize)
+
+;; here is a list of all pinned packages that should be downloaded from melpa-stable
+(add-to-list 'package-pinned-packages '(cider . "melpa-stable") t)
 
 ;; setup `use-package` package, install if not previously installed
 (if (not (package-installed-p 'use-package))
@@ -124,6 +129,9 @@
             (setq inferior-lisp-program (executable-find "sbcl"))
             (setq slime-contribs '(slime-scratch slime-editing-commands))
             (setq slime-contribs '(slime-fancy))))
+
+(use-package cider
+  :ensure t)
 
 (use-package haskell-mode
   :ensure t
