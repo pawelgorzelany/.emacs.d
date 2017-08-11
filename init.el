@@ -44,7 +44,6 @@
 (add-to-list 'package-archives '("melpa-stable" . "http://stable.melpa.org/packages/") t)
 
 (package-initialize)
-(add-to-list 'package-pinned-packages '(cider . "melpa-stable") t)
 
 ;; here is a list of all pinned packages that should be downloaded from melpa-stable
 (add-to-list 'package-pinned-packages '(cider . "melpa-stable") t)
@@ -89,10 +88,23 @@
   :init (progn
           (add-hook 'after-init-hook #'global-flycheck-mode)))
 
-(use-package auto-complete
+(use-package company
   :ensure t
   :init (progn
-          (ac-config-default)))
+          (add-hook 'after-init-hook 'global-company-mode)))
+
+;; (use-package auto-complete
+;;   :ensure t
+;;   :init (progn
+;;           (ac-config-default)))
+
+(use-package elpy
+  :ensure t
+  :init (progn
+          (elpy-enable)
+          (setq elpy-rpc-backend "jedi")
+          (setq elpy-modules
+                '(elpy-module-company elpy-module-eldoc elpy-module-pyvenv elpy-module-yasnippet elpy-module-sane-defaults))))
 
 (use-package yasnippet
   :ensure t
@@ -115,7 +127,7 @@
   :init (progn
           (use-package helm-projectile
             :ensure t)
-          (projectile-global-mode)
+          (projectile-mode)
           (setq projectile-completion-system 'helm)
           (helm-projectile-on)))
 
@@ -140,17 +152,52 @@
   :ensure t
   :mode (("\\.markdown\\'" . markdown-mode) ("\\.md\\'" . markdown-mode)))
 
-(use-package coffee-mode
-  :ensure t
-  :init (progn
-          (setq coffee-tab-width 2)))
-
-(use-package literate-coffee-mode
+(use-package yaml-mode
   :ensure t)
+
+(use-package json-mode
+  :ensure t)
+
+(use-package elm-mode
+  :ensure t)
+
+(defun setup-tide-mode ()
+  "Setup tide for TypeScript hacking."
+  (interactive)
+  (tide-setup)
+  (flycheck-mode t)
+  (setq flycheck-check-syntax-automatically '(idle-change mode-enabled))
+  (eldoc-mode t))
+  ;; company is an optional dependency. You have to
+  ;; install it separately via package-install
+  ;; `M-x package-install [ret] company`
+  ;; (company-mode +1))
+
+(use-package tide
+  :ensure t
+  :mode (("\\.tsx\\'" . web-mode) ("\\.jsx\\'" . web-mode))
+  :init (progn
+          (add-hook 'web-mode-hook
+                    (lambda ()
+                      (when (or
+                             (string-equal "tsx" (file-name-extension buffer-file-name))
+                             (string-equal "jsx" (file-name-extension buffer-file-name)))
+                        (setup-tide-mode))))
+          ;; aligns annotation to the right hand side
+          ;; (setq company-tooltip-align-annotations t)
+
+          ;; formats the buffer before saving
+          (add-hook 'before-save-hook 'tide-format-before-save)
+          (add-hook 'typescript-mode-hook #'setup-tide-mode)
+
+          ;; format options
+          (setq tide-format-options '(:insertSpaceAfterFunctionKeywordForAnonymousFunctions t :placeOpenBraceOnNewLineForFunctions nil))
+          (setq tide-tsserver-executable "node_modules/typescript/bin/tsserver")))
+
 
 (use-package web-mode
   :ensure t
-  :mode ("\\.html?\\'" . web-mode)
+  :mode (("\\.html?\\'" . web-mode) ("\\.php\\'" . web-mode))
   :init (progn
           (setq web-mode-markup-indent-offset 2)))
 
@@ -158,11 +205,11 @@
   :ensure t
   :bind ("C-c m" . magit-status))
 
-(use-package jedi
-  :ensure t
-  :init (progn
-          (add-hook 'python-mode-hook 'jedi:setup)
-          (setq jedi:complete-on-dot t)))
+;; (use-package jedi
+;;   :ensure t
+;;   :init (progn
+;;           (add-hook 'python-mode-hook 'jedi:setup)
+;;           (setq jedi:complete-on-dot t)))
 
 (use-package virtualenvwrapper
   :ensure t
@@ -184,13 +231,16 @@
 ;; do some custom OS X stuff like:
 ;;; - initialize exec-path-from-shell
 ;;; - enable menu
+;;; - set keyboard keys to be able to enter polish characters (disabling right option as meta)
 (if (memq window-system '(mac ns))
     (progn
       (use-package exec-path-from-shell
         :ensure t
         :init (progn
                 (exec-path-from-shell-initialize)))
-      (menu-bar-mode t)))
+      (menu-bar-mode t)
+      (setq mac-option-key-is-meta t)
+      (setq mac-right-option-modifier nil)))
 
 ;; modify window titlebar
 (defun set-window-title ()
@@ -212,22 +262,6 @@
 
 ;; add site-lisp folder to load-path for all packages that are not on melpa
 (add-to-list 'load-path "~/.emacs.d/site-lisp/")
-
-;; initialize pymacs, if it's installed
-(if (package-installed-p 'pymacs)
-    (progn
-     (autoload 'pymacs-apply "pymacs")
-     (autoload 'pymacs-call "pymacs")
-     (autoload 'pymacs-eval "pymacs" nil t)
-     (autoload 'pymacs-exec "pymacs" nil t)
-     (autoload 'pymacs-load "pymacs" nil t)
-     (autoload 'pymacs-autoload "pymacs")
-     ;;(eval-after-load "pymacs"
-     ;;  '(add-to-list 'pymacs-load-path YOUR-PYMACS-DIRECTORY"))
-
-     ;; initialize ropemacs
-     ;;(require 'pymacs)
-     (pymacs-load "ropemacs" "rope-")))
 
 (provide 'init)
 ;;; init.el ends here
