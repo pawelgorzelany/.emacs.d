@@ -20,6 +20,9 @@
  '(menu-bar-mode nil)
  '(org t)
  '(org-log-done t)
+ '(package-selected-packages
+   (quote
+    (intero yaml-mode web-mode virtualenvwrapper use-package twittering-mode tide slime rainbow-delimiters nyan-mode moe-theme markdown-mode magit literate-coffee-mode json-mode jedi helm-projectile haskell-mode exec-path-from-shell elpy elm-mode column-enforce-mode cider)))
  '(scroll-bar-mode nil)
  '(show-paren-mode t)
  '(tool-bar-mode nil)
@@ -71,6 +74,11 @@
             (load-theme 'moe-dark t)))
 
 ;; themes selection ends here.
+
+(use-package column-enforce-mode
+  :ensure t
+  :init (progn
+          (global-column-enforce-mode t)))
 
 (use-package rainbow-delimiters
   :ensure t
@@ -147,6 +155,11 @@
   :ensure t
   :init (progn
           (add-hook 'haskell-mode-hook 'turn-on-haskell-indent)))
+
+(use-package intero
+  :ensure t
+  :init (progn
+          (add-hook 'haskell-mode-hook 'intero-mode)))
 
 (use-package markdown-mode
   :ensure t
