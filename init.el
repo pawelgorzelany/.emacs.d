@@ -1,9 +1,11 @@
-;;; init.el --- Initialization file for Emacs.
+;;; init.el --- Initialization file for Emacs. -*- lexical-binding: t -*-
 ;;; Commentary:
 ;;; This is my Emacs setup.
 ;;; author: @pawelgorzelany
 
 ;;; Code:
+
+(setq lexical-binding t)
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
@@ -13,16 +15,19 @@
  '(auto-save-default nil)
  '(blink-cursor-mode nil)
  '(column-number-mode t)
+ '(create-lockfiles nil)
  '(indent-tabs-mode nil)
  '(inhibit-startup-screen t)
  '(initial-scratch-message nil)
  '(make-backup-files nil)
- '(menu-bar-mode nil)
+ '(neo-smart-open t)
+ '(neo-window-width 60)
  '(org t)
  '(org-log-done t)
  '(package-selected-packages
    (quote
-    (projectile helm company flycheck yasnippet-snippets intero yaml-mode web-mode virtualenvwrapper use-package twittering-mode tide slime rainbow-delimiters nyan-mode moe-theme markdown-mode magit literate-coffee-mode json-mode jedi helm-projectile haskell-mode exec-path-from-shell elpy elm-mode column-enforce-mode cider)))
+    (diminish forge restclient dockerfile-mode centaur-tabs doom-modeline dante yasnippet-snippets yaml-mode web-mode virtualenvwrapper use-package twittering-mode slime rainbow-delimiters php-mode nyan-mode moe-theme markdown-mode magit lua-mode json-mode intero helm-projectile go-mode find-file-in-project exec-path-from-shell elpy elm-mode edts column-enforce-mode cider)))
+ '(projectile-switch-project-action (quote neotree-projectile-action))
  '(scroll-bar-mode nil)
  '(show-paren-mode t)
  '(tool-bar-mode nil)
@@ -30,6 +35,7 @@
  '(visible-bell t))
 
 (put 'dired-find-alternate-file 'disabled nil)
+(add-hook 'prog-mode-hook #'display-line-numbers-mode)
 
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
@@ -41,6 +47,7 @@
 ;; initialize MELPA
 ;; by default install all packages from melpa but add also melpa-stable for pinned packages
 ;; like for example cider and slime
+
 (require 'package)
 
 (add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/") t)
@@ -49,6 +56,7 @@
 (package-initialize)
 
 ;; setup `use-package` package, install if not previously installed
+
 (unless (package-installed-p 'use-package)
     (progn
       (package-refresh-contents)
@@ -57,130 +65,169 @@
 (eval-when-compile
   (require 'use-package))
 
-;; now setup all 3rd party packages and install them as necessary
+;; install everything that uses use-package for setup
+(setq use-package-always-ensure t)
 
-(use-package moe-theme
-  :ensure t
-  :config (load-theme 'moe-dark t))
+;; visuals: fonts, icons etc
 
-(use-package column-enforce-mode
-  :ensure t
-  :init (global-column-enforce-mode t))
+(add-to-list 'default-frame-alist '(fullscreen . maximized))
+
+(ignore-errors (set-frame-font "Iosevka Term Thin 12"))
+
+(use-package all-the-icons)
+;; first time it's installed on a new machine it requires installing the fonts
+
+(use-package all-the-icons-dired
+  :after all-the-icons
+  :hook (dired-mode . all-the-icons-dired-mode))
+
+;; (use-package moe-theme
+;;   :config (load-theme 'moe-dark t))
+
+(use-package hide-mode-line
+  :hook (neotree-mode . hide-mode-line-mode))
+
+(use-package neotree
+  :diminish
+  :bind ("s-\\" . neotree-toggle)
+  :custom
+  (neo-smart-open t)
+  (neo-window-width 60)
+  (projectile-switch-project-action 'neotree-projectile-action))
+
+;; trying out some more fancy theme
+(use-package doom-themes
+  :custom
+  (doom-themes-neotree-file-icons t)
+  (doom-themes-enable-bold t)    ; if nil, bold is universally disabled
+  (doom-themes-enable-italic t) ; if nil, italics is universally disabled
+  :config
+  ;; Global settings (defaults)
+  (load-theme 'doom-one t)
+  ;; Enable flashing mode-line on errors
+  (doom-themes-visual-bell-config)
+  ;; Enable custom neotree theme (all-the-icons must be installed!)
+  (doom-themes-neotree-config)
+  ;; Corrects (and improves) org-mode's native fontification.
+  (doom-themes-org-config))
+
+(use-package doom-modeline
+  :config (doom-modeline-mode))
+
+(use-package centaur-tabs
+  :demand
+  :config
+  (centaur-tabs-mode t)
+  :custom
+  (centaur-tabs-set-bar 'left)
+  (centaur-tabs-set-icons t)
+  (centaur-tabs-set-modified-marker t)
+  (centaur-tabs-modified-marker "●")
+  (centaur-tabs-cycle-scope 'tabs)
+  (centaur-tabs-group-by-projectile-project)
+  :bind
+  ("s-[" . centaur-tabs-backward)
+  ("s-]" . centaur-tabs-forward))
+
+(use-package nyan-mode
+  :init (nyan-mode t))
+
+;; 3rd party packages
+
+(use-package diminish)
+
+(use-package exec-path-from-shell
+  :config (exec-path-from-shell-initialize))
 
 (use-package rainbow-delimiters
-  :ensure t
   :hook (prog-mode . rainbow-delimiters-mode))
 
+(use-package column-enforce-mode
+  :diminish
+  :init (global-column-enforce-mode t))
+
 (use-package flycheck
-  :ensure t
-  :hook (after-init . global-flycheck-mode))
-
-(use-package company
-  :ensure t
-  :hook (after-init . global-company-mode))
-
-(use-package elpy
-  :ensure t
-  :init (elpy-enable)
-  :config (setq elpy-modules '(elpy-module-company
-                               elpy-module-eldoc
-                               elpy-module-pyvenv
-                               elpy-module-yasnippet
-                               elpy-module-sane-defaults)))
-
-(use-package yasnippet-snippets
-  :ensure t)
-
-(use-package yasnippet
-  :after yasnippet-snippets
-  :ensure t
-  :hook (prog-mode . yas-minor-mode)
-  :init (yas-reload-all))
+  :config (global-flycheck-mode))
 
 (use-package helm
-  :ensure t
+  :diminish
   :bind ("C-c h" . helm-mini)
   :init (helm-mode t)
   :config (setq default-directory "~/Projects/"))
 
 (use-package projectile
-  :ensure t
+  :diminish
   :after helm
   :bind-keymap ("C-c p" . projectile-command-map)
   :init (projectile-mode t)
-  :config (setq projectile-completion-system 'helm))
+  :config
+  (setq projectile-completion-system 'helm)
+  (setq projectile-indexing-method 'alien))
 
 (use-package helm-projectile
-  :ensure t
   :after (helm projectile)
   :init (helm-projectile-on))
 
-(use-package slime
-  :pin melpa-stable
-  :ensure t
-  :commands slime
-  :init
-  (setq inferior-lisp-program (executable-find "sbcl"))
-  (setq slime-contribs '(slime-fancy)))
+(use-package company
+  :diminish
+  :hook (prog-mode . company-mode))
 
-(use-package cider
-  :pin melpa-stable
-  :ensure t)
+(use-package elpy
+  :init (elpy-enable)
+  :config
+  (setq elpy-modules (delq 'elpy-module-flymake elpy-modules))
+  (setq elpy-modules (delq 'elpy-module-highlight-indentation elpy-modules)))
+
+(use-package virtualenvwrapper
+  :config (setq venv-location "~/.virtualenvs/"))
+
+(use-package yasnippet-snippets)
+
+(use-package yasnippet
+  :after yasnippet-snippets
+  :hook (prog-mode . yas-minor-mode)
+  :init (yas-reload-all))
 
 (use-package haskell-mode
-  :ensure t
   :hook (haskell-mode . turn-on-haskell-indent))
 
-(use-package intero
-  :ensure t
-  :hook (haskell-mode . intero-mode))
+(use-package dante
+  :after haskell-mode
+  :commands 'dante-mode
+  :init
+  (add-hook 'haskell-mode-hook 'flycheck-mode)
+  (add-hook 'haskell-mode-hook 'dante-mode)
+  )
 
 (use-package markdown-mode
-  :ensure t
-  :mode (("\\.markdown\\'" . markdown-mode) ("\\.md\\'" . markdown-mode)))
+  :mode (("\\.markdown$" . markdown-mode) ("\\.md$" . markdown-mode)))
 
-(use-package yaml-mode
-  :ensure t)
+(use-package yaml-mode)
 
-(use-package json-mode
-  :ensure t)
+(use-package json-mode)
 
-(use-package elm-mode
-  :ensure t)
+(use-package dockerfile-mode)
+
+(use-package elm-mode)
 
 (use-package web-mode
-  :ensure t
-  :mode (("\\.html?\\'" . web-mode) ("\\.php\\'" . web-mode))
+  :mode (("\\.html?$" . web-mode) ("\\.php$" . web-mode))
   :config (setq web-mode-markup-indent-offset 2))
 
 (use-package magit
-  :ensure t
-  :bind ("C-c m" . magit-status))
+  :bind ("C-c m" . #'magit-status))
 
-(use-package virtualenvwrapper
-  :ensure t
-  :config (setq venv-location "~/.virtualenvs/"))
+(use-package forge
+  :after magit)
 
-(use-package twittering-mode
-  :ensure t
-  :config
-  (setq twittering-use-master-password t)
-  (setq twittering-icon-mode t)
-  (setq twittering-use-icon-storage t))
-
-(use-package nyan-mode
-  :ensure t
-  :init (nyan-mode t))
+(use-package restclient
+  :mode ("\\.restclient$" . restclient-mode))
 
 ;; do some custom OS X stuff like:
-;;; - initialize exec-path-from-shell
 ;;; - enable menu
 ;;; - set keyboard keys to be able to enter polish characters (disabling right option as meta)
 (if (memq window-system '(mac ns))
     (progn
-      (use-package exec-path-from-shell
-        :ensure t
-        :config (exec-path-from-shell-initialize))
       (menu-bar-mode t)
       (setq mac-option-key-is-meta t)
       (setq mac-right-option-modifier nil)))
@@ -189,10 +236,9 @@
 (defun set-window-title ()
   "Set window title to either filename or buffer name."
   (if window-system
-      (progn
-        (setq frame-title-format '(:eval (if (buffer-file-name)
-                                             (abbreviate-file-name (buffer-file-name))
-                                           "%b"))))))
+      (setq frame-title-format '(:eval (if (buffer-file-name)
+                                           (abbreviate-file-name (buffer-file-name))
+                                         "%b")))))
 
 (add-hook 'window-setup-hook #'set-window-title)
 
@@ -202,9 +248,6 @@
 
 ;; shorten 'yes or no' to 'y or n'
 (defalias 'yes-or-no-p 'y-or-n-p)
-
-;; add site-lisp folder to load-path for all packages that are not on melpa
-(add-to-list 'load-path "~/.emacs.d/site-lisp/")
 
 (provide 'init)
 ;;; init.el ends here
