@@ -16,6 +16,10 @@
  '(blink-cursor-mode nil)
  '(column-number-mode t)
  '(create-lockfiles nil)
+ '(display-battery-mode t)
+ '(doom-themes-enable-bold t)
+ '(doom-themes-enable-italic t)
+ '(doom-themes-neotree-file-icons t)
  '(indent-tabs-mode nil)
  '(inhibit-startup-screen t)
  '(initial-scratch-message nil)
@@ -26,7 +30,7 @@
  '(org-log-done t)
  '(package-selected-packages
    (quote
-    (diminish forge restclient dockerfile-mode centaur-tabs doom-modeline dante yasnippet-snippets yaml-mode web-mode virtualenvwrapper use-package twittering-mode slime rainbow-delimiters php-mode nyan-mode moe-theme markdown-mode magit lua-mode json-mode intero helm-projectile go-mode find-file-in-project exec-path-from-shell elpy elm-mode edts column-enforce-mode cider)))
+    (doom-themes neotree hide-mode-line all-the-icons-dired all-the-icons diminish forge restclient dockerfile-mode centaur-tabs doom-modeline dante yasnippet-snippets yaml-mode web-mode virtualenvwrapper use-package twittering-mode slime rainbow-delimiters php-mode nyan-mode moe-theme markdown-mode magit lua-mode json-mode intero helm-projectile go-mode find-file-in-project exec-path-from-shell elpy elm-mode edts column-enforce-mode cider)))
  '(projectile-switch-project-action (quote neotree-projectile-action))
  '(scroll-bar-mode nil)
  '(show-paren-mode t)
@@ -76,6 +80,7 @@
 
 (use-package all-the-icons)
 ;; first time it's installed on a new machine it requires installing the fonts
+;; https://github.com/domtronn/all-the-icons.el#installing-fonts
 
 (use-package all-the-icons-dired
   :after all-the-icons
