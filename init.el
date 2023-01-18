@@ -17,21 +17,20 @@
  '(column-number-mode t)
  '(create-lockfiles nil)
  '(display-battery-mode t)
- '(doom-themes-enable-bold t)
- '(doom-themes-enable-italic t)
- '(doom-themes-neotree-file-icons t)
+ '(doom-themes-enable-bold t nil nil "Customized with use-package doom-themes")
+ '(doom-themes-enable-italic t nil nil "Customized with use-package doom-themes")
+ '(doom-themes-neotree-file-icons t nil nil "Customized with use-package doom-themes")
  '(indent-tabs-mode nil)
  '(inhibit-startup-screen t)
  '(initial-scratch-message nil)
  '(make-backup-files nil)
- '(neo-smart-open t)
- '(neo-window-width 60)
+ '(neo-smart-open t nil nil "Customized with use-package neotree")
+ '(neo-window-width 60 nil nil "Customized with use-package neotree")
  '(org t)
  '(org-log-done t)
  '(package-selected-packages
-   (quote
-    (doom-themes neotree hide-mode-line all-the-icons-dired all-the-icons diminish forge restclient dockerfile-mode centaur-tabs doom-modeline dante yasnippet-snippets yaml-mode web-mode virtualenvwrapper use-package twittering-mode slime rainbow-delimiters php-mode nyan-mode moe-theme markdown-mode magit lua-mode json-mode intero helm-projectile go-mode find-file-in-project exec-path-from-shell elpy elm-mode edts column-enforce-mode cider)))
- '(projectile-switch-project-action (quote neotree-projectile-action))
+   '(terraform-mode bazel jinja2-mode auto-virtualenv haskell-mode company projectile helm flycheck doom-themes neotree hide-mode-line all-the-icons-dired all-the-icons diminish forge restclient dockerfile-mode centaur-tabs doom-modeline dante yasnippet-snippets yaml-mode web-mode virtualenvwrapper use-package twittering-mode slime rainbow-delimiters php-mode nyan-mode moe-theme markdown-mode magit lua-mode json-mode intero helm-projectile go-mode find-file-in-project exec-path-from-shell elpy elm-mode edts column-enforce-mode cider))
+ '(projectile-switch-project-action 'neotree-projectile-action nil nil "Customized with use-package neotree")
  '(scroll-bar-mode nil)
  '(show-paren-mode t)
  '(tool-bar-mode nil)
@@ -147,9 +146,10 @@
 (use-package rainbow-delimiters
   :hook (prog-mode . rainbow-delimiters-mode))
 
-(use-package column-enforce-mode
-  :diminish
-  :init (global-column-enforce-mode t))
+;; TODO set this to maybe only .md and .rst files and let linters handle programming modes
+;; (use-package column-enforce-mode
+;;   :diminish
+;;   :init (global-column-enforce-mode t))
 
 (use-package flycheck
   :config (global-flycheck-mode))
@@ -179,12 +179,15 @@
 
 (use-package elpy
   :init (elpy-enable)
+  :hook (elpy-mode . (lambda () (add-hook 'before-save-hook 'elpy-black-fix-code nil t)))
   :config
   (setq elpy-modules (delq 'elpy-module-flymake elpy-modules))
   (setq elpy-modules (delq 'elpy-module-highlight-indentation elpy-modules)))
 
-(use-package virtualenvwrapper
-  :config (setq venv-location "~/.virtualenvs/"))
+;; alternative would be to use pyenv-mode and pyenv-mode-auto
+(use-package auto-virtualenv
+  :after projectile
+  :hook (python-mode . auto-virtualenv-set-virtualenv))
 
 (use-package yasnippet-snippets)
 
